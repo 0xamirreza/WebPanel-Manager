@@ -1,0 +1,122 @@
+/* Web Panel Manager Styles */
+
+.panel-card {
+    transition: all 0.2s ease;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.panel-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.panel-type-badge {
+    font-size: 0.75em;
+    font-weight: 600;
+    padding: 0.35em 0.65em;
+}
+
+.card-footer {
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.btn {
+    transition: all 0.15s ease;
+    font-weight: 500;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.g-2 {
+    --bs-gutter-x: 0.5rem;
+    --bs-gutter-y: 0.5rem;
+}
+
+/* Copy functionality styles */
+.copyable-text {
+    cursor: pointer;
+    position: relative;
+    padding: 2px 4px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+}
+
+.copyable-text:hover {
+    background-color: #e9ecef;
+}
+
+.copy-icon {
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 2px;
+}
+
+.copyable-text:hover .copy-icon {
+    opacity: 1;
+    background-color: #dee2e6;
+}
+
+.copy-icon:hover {
+    opacity: 1 !important;
+    background-color: #adb5bd;
+    transform: scale(1.1);
+}
+
+/* Password container styles */
+.password-container {
+    cursor: pointer;
+    position: relative;
+    padding: 2px 4px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+}
+
+.password-container:hover {
+    background-color: #e9ecef;
+}
+
+.password-toggle, .password-container .copy-icon {
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 2px;
+    display: inline-block;
+    color: #6c757d;
+}
+
+.password-container:hover .password-toggle,
+.password-container:hover .copy-icon {
+    opacity: 1;
+    background-color: #dee2e6;
+}
+
+.password-toggle:hover, .password-container .copy-icon:hover {
+    opacity: 1 !important;
+    background-color: #adb5bd;
+    transform: scale(1.1);
+}
+
+/* Copy success feedback */
+.copy-success {
+    background-color: #d4edda !important;
+    color: #155724 !important;
+}
+
+/* Ensure copy icon in password container is visible */
+.password-container .copy-icon {
+    opacity: 0.7 !important;
+    color: #6c757d !important;
+    visibility: visible !important;
+}
+
+.password-container:hover .copy-icon {
+    opacity: 1 !important;
+    color: #495057 !important;
+}

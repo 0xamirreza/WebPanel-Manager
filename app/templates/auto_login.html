@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WPM - Login - {{ panel.name }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4><i class="bi bi-box-arrow-in-right"></i> WPM Login</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="mb-4">
+                            <i class="bi bi-gear-fill text-primary" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5>Logging into {{ panel.name }}</h5>
+                        <p class="text-muted">Please wait while we redirect you to the panel...</p>
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auto-login form -->
+    <form id="loginForm" method="POST" action="{{ panel.login_url }}" style="display: none;">
+        {% if panel.panel_type == 'cpanel' %}
+            <input type="hidden" name="user" value="{{ panel.username }}">
+            <input type="hidden" name="pass" value="{{ panel.password }}">
+        {% elif panel.panel_type == 'directadmin' %}
+            <input type="hidden" name="username" value="{{ panel.username }}">
+            <input type="hidden" name="password" value="{{ panel.password }}">
+        {% elif panel.panel_type == 'plesk' %}
+            <input type="hidden" name="login_name" value="{{ panel.username }}">
+            <input type="hidden" name="passwd" value="{{ panel.password }}">
+        {% else %}
+            <input type="hidden" name="username" value="{{ panel.username }}">
+            <input type="hidden" name="password" value="{{ panel.password }}">
+        {% endif %}
+    </form>
+
+    <script>
+        // Pass panel data to JavaScript
+        window.panelLoginUrl = "{{ panel.login_url }}";
+        window.panelUsername = "{{ panel.username }}";
+        window.panelPassword = "{{ panel.password }}";
+    </script>
+    <script src="{{ url_for('static', filename='js/auto-login.js') }}"></script>
+</body>
+</html>
