@@ -12,6 +12,12 @@ def create_app():
     
     # Use a simple database path that works with Docker volumes
     db_path = '/app/data/webpanel_manager.db'
+    
+    # Ensure data directory exists
+    data_dir = os.path.dirname(db_path)
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir, exist_ok=True)
+    
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
@@ -29,6 +35,13 @@ def create_app():
     
     # Create database tables
     with app.app_context():
-        db.create_all()
+        try:
+            db.create_all()
+            print(f"✅ Database initialized successfully at: {db_path}")
+        except Exception as e:
+            print(f"❌ Database initialization failed: {e}")
+            print(f"📁 Data directory: {data_dir}")
+            print(f"🔐 Directory permissions: {oct(os.stat(data_dir).st_mode)[-3:] if os.path.exists(data_dir) else 'N/A'}")
+            raise
     
     return app
