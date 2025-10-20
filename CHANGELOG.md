@@ -25,6 +25,7 @@
 - Responsive Bootstrap UI
 - FontAwesome icons
 - Custom favicon
+- Footer with project information
 
 ### Technical
 - Flask MVT architecture

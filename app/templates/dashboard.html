@@ -11,7 +11,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body class="bg-light d-flex flex-column min-vh-100">
     <nav class="navbar navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('main.dashboard') }}">
@@ -20,7 +20,7 @@
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <div class="container mt-4 flex-grow-1">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -302,5 +302,25 @@
     </script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-auto">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">Made with ❤️ by <a href="https://github.com/0xamirreza" target="_blank" class="text-light text-decoration-none">@0xamirreza</a></p>
+                    <small class="text">Version {{ version }}</small>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="https://0xv.ir/wpm/" target="_blank" class="text-light text-decoration-none me-3">
+                        <i class="bi bi-globe me-2"></i>Website
+                    </a>
+                    <a href="https://github.com/0xamirreza/WebPanel-Manager" target="_blank" class="text-light text-decoration-none">
+                        <i class="bi bi-github me-2"></i>GitHub Repository
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

@@ -9,6 +9,7 @@ def create_app():
     
     # Configuration
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+    app.config['VERSION'] = os.environ.get('VERSION', '1.0.0')
     
     # Use a simple database path that works with Docker volumes
     db_path = '/app/data/webpanel_manager.db'
@@ -23,6 +24,11 @@ def create_app():
     
     # Initialize extensions
     db.init_app(app)
+    
+    # Context processor to make version available in all templates
+    @app.context_processor
+    def inject_version():
+        return dict(version=app.config['VERSION'])
     
     # Register blueprints
     from app.views.main import main_bp
