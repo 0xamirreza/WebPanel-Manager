@@ -12,7 +12,7 @@ A modern, self-hosted web panel manager built with Flask, Bootstrap, and SQLite3
 ### 🎯 **Core Functionality**
 - **Centralized Dashboard**: Manage all your web panels from one beautiful interface
 - **Multiple Panel Support**: cPanel, DirectAdmin, Plesk, CyberPanel, Virtualmin, Webmin, Froxlor, AA Panel
-- **Auto-Login**: One-click login to your panels with automatic form submission
+- **Auto-Login**: One-click login to your panels with automatic form submission (Coming Soon)
 - **CRUD Operations**: Add, edit, delete panel configurations with ease
 
 ### 🔐 **Security & Privacy**
