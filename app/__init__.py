@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
+from sqlalchemy import text
+from app.utils.date_utils import gregorian_date_to_jalali_string, gregorian_datetime_to_jalali_string
 
 db = SQLAlchemy()
 
@@ -9,7 +11,7 @@ def create_app():
     
     # Configuration
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
-    app.config['VERSION'] = os.environ.get('VERSION', '1.0.0')
+    app.config['VERSION'] = os.environ.get('VERSION', '2.0.0')
     
     # Use a simple database path that works with Docker volumes
     db_path = '/app/data/webpanel_manager.db'
@@ -28,7 +30,11 @@ def create_app():
     # Context processor to make version available in all templates
     @app.context_processor
     def inject_version():
-        return dict(version=app.config['VERSION'])
+        return dict(
+            version=app.config['VERSION'],
+            to_jalali_date=gregorian_date_to_jalali_string,
+            to_jalali_datetime=gregorian_datetime_to_jalali_string
+        )
     
     # Register blueprints
     from app.views.main import main_bp
@@ -43,6 +49,15 @@ def create_app():
     with app.app_context():
         try:
             db.create_all()
+            # Lightweight schema migration for existing SQLite databases
+            inspector = db.inspect(db.engine)
+            panel_columns = {column['name'] for column in inspector.get_columns('panel')}
+
+            if 'start_date' not in panel_columns:
+                db.session.execute(text("ALTER TABLE panel ADD COLUMN start_date DATE"))
+            if 'end_date' not in panel_columns:
+                db.session.execute(text("ALTER TABLE panel ADD COLUMN end_date DATE"))
+            db.session.commit()
             print(f"✅ Database initialized successfully at: {db_path}")
         except Exception as e:
             print(f"❌ Database initialization failed: {e}")

@@ -3,9 +3,22 @@
 echo "🚀 Starting Web Panel Manager..."
 echo "=================================="
 
+# Detect Docker Compose command (v2 plugin or v1 binary)
+if docker compose version >/dev/null 2>&1; then
+    DOCKER_COMPOSE_CMD="docker compose"
+elif command -v docker-compose >/dev/null 2>&1; then
+    DOCKER_COMPOSE_CMD="docker-compose"
+else
+    echo "❌ Docker Compose not found."
+    echo "   Install Docker Compose plugin (docker compose) or docker-compose binary."
+    exit 1
+fi
+
+echo "🐳 Using: $DOCKER_COMPOSE_CMD"
+
 # Stop any running containers
 echo "Stopping containers..."
-docker-compose down
+$DOCKER_COMPOSE_CMD down
 
 # Create data directory with proper permissions
 echo "📁 Creating data directory..."
@@ -36,11 +49,11 @@ ls -la data/ 2>/dev/null || echo "   Data directory not accessible"
 
 # Rebuild the image
 echo "Rebuilding Docker image..."
-docker-compose build
+$DOCKER_COMPOSE_CMD build
 
 # Start the application
 echo "Starting application..."
-docker-compose up -d
+$DOCKER_COMPOSE_CMD up -d
 
 # Wait a moment
 sleep 3
@@ -48,7 +61,7 @@ sleep 3
 # Check status
 echo ""
 echo "📊 Status Check:"
-if docker-compose ps | grep -q "Up"; then
+if $DOCKER_COMPOSE_CMD ps | grep -q "Up"; then
     echo "✅ Container is running"
     
     if [ -f "data/webpanel_manager.db" ]; then
@@ -66,5 +79,5 @@ if docker-compose ps | grep -q "Up"; then
 else
     echo "❌ Container failed to start"
     echo "📋 Logs:"
-    docker-compose logs
+    $DOCKER_COMPOSE_CMD logs
 fi

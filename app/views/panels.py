@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from app.models.panel import Panel
 from app import db
+from app.utils.date_utils import parse_jalali_date
 
 panels_bp = Blueprint('panels', __name__)
 
@@ -15,6 +16,18 @@ def add_panel():
         password = request.form['password']
         host_provider = request.form.get('host_provider', '')
         notes = request.form.get('notes', '')
+        start_date_raw = request.form.get('start_date', '').strip()
+        end_date_raw = request.form.get('end_date', '').strip()
+        try:
+            start_date = parse_jalali_date(start_date_raw) if start_date_raw else None
+            end_date = parse_jalali_date(end_date_raw) if end_date_raw else None
+        except Exception:
+            flash('Invalid Jalali date format. Use YYYY/MM/DD.', 'danger')
+            return redirect(url_for('panels.add_panel'))
+
+        if start_date and end_date and end_date < start_date:
+            flash('End date cannot be earlier than start date.', 'danger')
+            return redirect(url_for('panels.add_panel'))
         
         # Create new panel
         panel = Panel(
@@ -25,7 +38,9 @@ def add_panel():
             username=username,
             password=password,
             host_provider=host_provider,
-            notes=notes
+            notes=notes,
+            start_date=start_date,
+            end_date=end_date
         )
         
         db.session.add(panel)
@@ -49,6 +64,18 @@ def edit_panel(panel_id):
         panel.password = request.form['password']
         panel.host_provider = request.form.get('host_provider', '')
         panel.notes = request.form.get('notes', '')
+        start_date_raw = request.form.get('start_date', '').strip()
+        end_date_raw = request.form.get('end_date', '').strip()
+        try:
+            panel.start_date = parse_jalali_date(start_date_raw) if start_date_raw else None
+            panel.end_date = parse_jalali_date(end_date_raw) if end_date_raw else None
+        except Exception:
+            flash('Invalid Jalali date format. Use YYYY/MM/DD.', 'danger')
+            return redirect(url_for('panels.edit_panel', panel_id=panel.id))
+
+        if panel.start_date and panel.end_date and panel.end_date < panel.start_date:
+            flash('End date cannot be earlier than start date.', 'danger')
+            return redirect(url_for('panels.edit_panel', panel_id=panel.id))
         
         db.session.commit()
         flash('Panel updated successfully!', 'success')

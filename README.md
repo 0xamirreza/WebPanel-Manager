@@ -2,7 +2,7 @@
 
 A modern, self-hosted web panel manager built with Flask, Bootstrap, and SQLite3. Centralize and manage multiple hosting control panels from a single, beautiful dashboard.
 
-[![WebPanel Manager](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/0xamirreza/WebPanel-Manager)
+[![WebPanel Manager](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/0xamirreza/WebPanel-Manager)
 [![Python](https://img.shields.io/badge/python-3.11+-green.svg)](https://python.org)
 [![Flask](https://img.shields.io/badge/flask-2.3.3-red.svg)](https://flask.palletsprojects.com)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://docker.com)
@@ -14,6 +14,7 @@ A modern, self-hosted web panel manager built with Flask, Bootstrap, and SQLite3
 - **Multiple Panel Support**: cPanel, DirectAdmin, Plesk, CyberPanel, Virtualmin, Webmin, Froxlor, AA Panel
 - **Auto-Login**: One-click login to your panels with automatic form submission (Coming Soon)
 - **CRUD Operations**: Add, edit, delete panel configurations with ease
+- **Service Period Tracking**: Set start/end dates and monitor remaining days per service
 
 ### 🔐 **Security & Privacy**
 - **Password Visibility Toggle**: Show/hide passwords with eye icon
@@ -22,6 +23,7 @@ A modern, self-hosted web panel manager built with Flask, Bootstrap, and SQLite3
 - **Data Persistence**: All data persists between Docker restarts
 - **Backup & Restore**: Export/import data with JSON or database file backup
 - **Environment Configuration**: Secure `.env` file support for sensitive data
+- **Offline Deployment**: No runtime dependency on CDN assets
 
 ### 🎨 **User Experience**
 - **Modern UI**: Bootstrap 5 with FontAwesome icons
@@ -29,6 +31,7 @@ A modern, self-hosted web panel manager built with Flask, Bootstrap, and SQLite3
 - **Interactive Cards**: Hover effects and smooth animations
 - **Modal Dialogs**: Professional info and confirmation modals
 - **Copy Feedback**: Visual feedback for successful clipboard operations
+- **Jalali Calendar Support**: Persian (Shamsi) date input and display
 
 ### 📊 **Panel Management**
 - **Host Provider Tracking**: Record which hosting provider you're using
@@ -89,6 +92,8 @@ Open your browser and go to: `http://localhost:44553`
    - **Username & Password**: Your panel credentials
    - **Host Provider**: Optional hosting provider name
    - **Notes**: Optional notes and reminders
+   - **Service Start Date**: Optional Jalali date (`YYYY/MM/DD`)
+   - **Service End Date**: Optional Jalali date (`YYYY/MM/DD`)
 
 3. Click **"Add Panel"** to save
 
@@ -99,12 +104,20 @@ Open your browser and go to: `http://localhost:44553`
 - **Edit**: Click the edit icon to modify panel details
 - **Delete**: Click the delete icon to remove a panel
 - **Copy Credentials**: Click the copy icons to copy username/password
+- **Track Expiration**: See `Remaining Days` for each panel service period
 
 ### Password Management
 
 - **Show Password**: Click the eye icon to reveal the password
 - **Hide Password**: Click the eye-slash icon to hide the password
 - **Copy Password**: Click the copy icon to copy password to clipboard
+
+### Date System (Jalali / Shamsi)
+
+- Service dates use **Jalali format**: `YYYY/MM/DD` (example: `1405/06/03`)
+- Dates are stored in Gregorian format internally for database consistency
+- Dashboard and detail modal display dates in Jalali format
+- Created time is displayed based on **Asia/Tehran** timezone
 
 ### Backup & Restore
 
@@ -214,6 +227,9 @@ The application uses SQLite3 for simplicity and portability:
 - Automatic health monitoring
 - Restart on failure
 
+### Compose Compatibility
+- `run.sh` supports both `docker compose` (v2) and `docker-compose` (legacy)
+
 ## 🔒 Security Considerations
 
 ### Production Deployment
@@ -247,7 +263,7 @@ The application uses SQLite3 for simplicity and portability:
 ### Building Docker Image
 
 ```bash
-docker-compose build --no-cache
+docker compose build --no-cache
 ```
 
 ## 📝 API Endpoints

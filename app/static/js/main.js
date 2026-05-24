@@ -27,6 +27,9 @@ function showPanelInfo(panelId) {
                     <tr><td><strong>Domain:</strong></td><td>${panel.domain}</td></tr>
                     <tr><td><strong>Panel Type:</strong></td><td><span class="badge bg-secondary">${panel.panel_type.toUpperCase()}</span></td></tr>
                     <tr><td><strong>Provider:</strong></td><td>${panel.host_provider || 'Not specified'}</td></tr>
+                    <tr><td><strong>Start Date:</strong></td><td>${panel.start_date || 'Not specified'}</td></tr>
+                    <tr><td><strong>End Date:</strong></td><td>${panel.end_date || 'Not specified'}</td></tr>
+                    <tr><td><strong>Remaining Days:</strong></td><td>${formatRemainingDays(panel.remaining_days)}</td></tr>
                     <tr><td><strong>Created:</strong></td><td>${panel.created_at}</td></tr>
                 </table>
             </div>
@@ -193,6 +196,19 @@ function showCopyError() {
             alertDiv.parentNode.removeChild(alertDiv);
         }
     }, 5000);
+}
+
+function formatRemainingDays(remainingDays) {
+    if (remainingDays === null || remainingDays === undefined) {
+        return 'Not specified';
+    }
+    if (remainingDays < 0) {
+        return `Expired ${Math.abs(remainingDays)} days ago`;
+    }
+    if (remainingDays === 0) {
+        return 'Expires Today';
+    }
+    return `${remainingDays} days left`;
 }
 
 // Initialize when DOM is loaded

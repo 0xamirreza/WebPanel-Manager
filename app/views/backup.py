@@ -18,7 +18,7 @@ def export_backup():
         
         # Create backup data structure
         backup_data = {
-            'version': '1.0.0',
+            'version': '2.0.0',
             'exported_at': datetime.utcnow().isoformat(),
             'panels': []
         }

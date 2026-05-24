@@ -6,9 +6,9 @@
     <title>Web Panel Manager</title>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}?v={{ version }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendor/bootstrap-icons/css/bootstrap-icons.css') }}?v={{ version }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendor/fontawesome/css/all.min.css') }}?v={{ version }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
@@ -83,6 +83,22 @@
                                 <strong>Domain:</strong> {{ panel.domain }}<br>
                                 {% if panel.host_provider %}
                                 <strong>Provider:</strong> {{ panel.host_provider }}<br>
+                                {% endif %}
+                                {% if panel.start_date %}
+                                <strong>Start Date:</strong> {{ to_jalali_date(panel.start_date) }}<br>
+                                {% endif %}
+                                {% if panel.end_date %}
+                                <strong>End Date:</strong> {{ to_jalali_date(panel.end_date) }}<br>
+                                <strong>Remaining Days:</strong> 
+                                {% if panel.remaining_days < 0 %}
+                                    <span class="badge bg-danger">Expired {{ panel.remaining_days|abs }} days ago</span><br>
+                                {% elif panel.remaining_days == 0 %}
+                                    <span class="badge bg-warning text-dark">Expires Today</span><br>
+                                {% elif panel.remaining_days <= 7 %}
+                                    <span class="badge bg-warning text-dark">{{ panel.remaining_days }} days left</span><br>
+                                {% else %}
+                                    <span class="badge bg-success">{{ panel.remaining_days }} days left</span><br>
+                                {% endif %}
                                 {% endif %}
                                 <strong>Username:</strong> 
                                 <span class="copyable-text" data-value="{{ panel.username }}">
@@ -281,7 +297,7 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}?v={{ version }}"></script>
     <script>
         // Initialize panel data from server
         const panelData = {
@@ -295,7 +311,10 @@
                 password: "{{ panel.password }}",
                 host_provider: "{{ panel.host_provider or '' }}",
                 notes: "{{ panel.notes or '' }}",
-                created_at: "{{ panel.created_at.strftime('%Y-%m-%d %H:%M') }}"
+                start_date: "{{ to_jalali_date(panel.start_date) if panel.start_date else '' }}",
+                end_date: "{{ to_jalali_date(panel.end_date) if panel.end_date else '' }}",
+                remaining_days: {{ panel.remaining_days if panel.remaining_days is not none else 'null' }},
+                created_at: "{{ to_jalali_datetime(panel.created_at) }}"
             }{% if not loop.last %},{% endif %}
             {% endfor %}
         };
